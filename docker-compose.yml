@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: artixio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: artixio_regulatory
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - artixio_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  artixio_postgres_data:

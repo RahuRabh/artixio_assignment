@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ActionStatus {
+  PENDING
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model RegulatoryAuthority {
+  id         String                @id @default(cuid())
+  code       String                @unique
+  name       String
+  region     String
+  website    String
+  directives ComplianceDirective[]
+}
+
+model ComplianceDirective {
+  id            String                @id @default(cuid())
+  authorityId   String
+  title         String
+  summary       String
+  riskLevel     RiskLevel
+  effectiveDate DateTime?
+  rawPayload    Json
+  authority     RegulatoryAuthority   @relation(fields: [authorityId], references: [id], onDelete: Cascade)
+  actionItems   ActionItem[]
+}
+
+model ActionItem {
+  id          String                @id @default(cuid())
+  directiveId String
+  title       String
+  assignedTo  String
+  status      ActionStatus
+  priority    Priority
+  dueDate     DateTime?
+  flagReason  String?
+  directive   ComplianceDirective   @relation(fields: [directiveId], references: [id], onDelete: Cascade)
+}

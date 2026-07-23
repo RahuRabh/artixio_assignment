@@ -1,0 +1,20 @@
+{
+  "name": "artixio-regulatory-decision-layer",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @artixio/shared dev\" \"pnpm --filter @artixio/backend dev\" \"pnpm --filter @artixio/frontend dev\"",
+    "build": "pnpm --filter @artixio/shared build && pnpm --filter @artixio/backend build && pnpm --filter @artixio/frontend build",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:generate": "pnpm --filter @artixio/backend prisma:generate",
+    "db:push": "pnpm --filter @artixio/backend prisma:push",
+    "db:seed": "pnpm --filter @artixio/backend prisma:seed",
+    "test": "pnpm --filter @artixio/backend test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
+
