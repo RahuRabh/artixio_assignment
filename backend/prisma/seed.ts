@@ -157,13 +157,19 @@ function createPayload(index: number, authorityCode: string, title: string) {
 }
 
 async function main() {
-  await prisma.actionItem.deleteMany();
-  await prisma.complianceDirective.deleteMany();
-  await prisma.regulatoryAuthority.deleteMany();
+  const existingDirectiveCount = await prisma.complianceDirective.count();
+  if (existingDirectiveCount > 0) {
+    console.log(`Seed skipped: ${existingDirectiveCount} directives already exist.`);
+    return;
+  }
 
   const createdAuthorities = [];
   for (const authority of authorities) {
-    const created = await prisma.regulatoryAuthority.create({ data: authority });
+    const created = await prisma.regulatoryAuthority.upsert({
+      where: { code: authority.code },
+      update: authority,
+      create: authority
+    });
     createdAuthorities.push(created);
   }
 
@@ -241,4 +247,3 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-

@@ -11,6 +11,7 @@
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:seed": "prisma db seed",
+    "prisma:bootstrap": "prisma db push && prisma db seed",
     "test": "vitest run"
   },
   "prisma": {
