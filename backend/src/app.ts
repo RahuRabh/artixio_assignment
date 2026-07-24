@@ -11,7 +11,24 @@ export const app = express();
 
 app.use(
   cors({
-    origin: env.FRONTEND_ORIGIN
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed = env.allowedOrigins.some(
+        (allowedOrigin) => allowedOrigin.replace(/\/$/, "") === normalizedOrigin
+      );
+
+      if (isAllowed) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
   })
 );
 app.use(express.json());
@@ -44,4 +61,3 @@ app.use((error: unknown, _request: express.Request, response: express.Response, 
     message: "Internal server error"
   });
 });
-

@@ -79,6 +79,7 @@ Frontend runs at `http://localhost:5173` and backend at `http://localhost:4000`.
 DATABASE_URL="postgresql://postgres:postgres@localhost:5433/artixio_regulatory?schema=public"
 PORT=4000
 FRONTEND_ORIGIN="http://localhost:5173"
+FRONTEND_ORIGINS="http://localhost:5173,https://artixio-assignment-frontend.vercel.app"
 ```
 
 ### Frontend
@@ -210,6 +211,7 @@ pnpm --filter @artixio/backend start
 DATABASE_URL=<your-render-postgres-internal-or-external-url>
 PORT=10000
 FRONTEND_ORIGIN=<your-vercel-frontend-url>
+FRONTEND_ORIGINS=<optional-comma-separated-extra-origins>
 ```
 
 Important notes:
