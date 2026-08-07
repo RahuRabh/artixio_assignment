@@ -225,21 +225,3 @@ url = env("DATABASE_URL")
 ```
 
 If you see an error like `env("DATABASE_URL:)`, that usually means the value was copied with broken quotes or a missing closing quote somewhere during editing or in the deployment UI. The schema property `url` is still valid inside the `datasource db` block.
-
-## 2-3 Minute Loom Script
-
-Hi, this is my Artixio technical assessment submission. I built a single-page decision-layer application for a regulatory compliance officer who needs to review messy, fast-moving regulatory updates in a dense workstation-style interface.
-
-At a technical level, the project is organized as a `pnpm` monorepo with a React frontend, an Express and TypeScript backend, PostgreSQL with Prisma, and a small shared package that keeps the frontend and backend aligned on enums, Zod schemas, and API contracts.
-
-The data model has three relational entities. `RegulatoryAuthority` stores agencies like FDA and EMA. `ComplianceDirective` stores the regulatory update itself, including a flexible `rawPayload` JSON field. `ActionItem` stores the operational follow-up work for each directive. I kept `rawPayload` as JSON intentionally, because in this domain the incoming data is often inconsistent, partially extracted, or structurally messy.
-
-To make that realistic, the seed script generates 48 directives with intentional anomalies. Around twelve percent have missing effective dates, about ten percent contain conflicting resolved states with overdue dates and no supporting note, and a smaller set have malformed payload structures or unsupported schema versions.
-
-On the backend, I built a sanitization layer with Zod. Instead of dropping bad records or crashing, the API normalizes every directive into a safe UI model, adds `hasAnomaly`, assigns a data health state, and returns specific anomaly messages like missing due date or corrupt payload metadata. That lets the system stay operational even when the source data is imperfect.
-
-On the frontend, the app is a single-screen triage workspace. The top strip shows metrics, the toolbar supports debounced search and filtering, the main grid is built for dense review, and the right-side drawer lets the user inspect anomalies and raw payload details without losing their table context. Inline action status changes use optimistic updates so the interface feels fast.
-
-One useful AI-assisted debugging example came up during implementation and deployment. I found that optimistic updates needed directive-level metadata returned from the PATCH endpoint, otherwise anomaly badges could drift from the real backend state. I also resolved a Prisma deployment issue by making client generation happen during build and by separating the app's Docker Postgres port from a conflicting local database port.
-
-Overall, I aimed to build something that feels realistic for regulatory operations: resilient to messy data, quick to scan, and safe under imperfect inputs.
